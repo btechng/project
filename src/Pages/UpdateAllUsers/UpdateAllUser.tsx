@@ -84,7 +84,8 @@ const UpdateAllUsers: React.FC = () => {
         userData
       );
       setSuccess("Profile updated successfully!");
-      setTimeout(() => navigate(`/userprofile`), 1500);
+      //NAVIGATION BACK TO SCREEN OF CHOICE
+      setTimeout(() => navigate(`/userprofile`), 1300);
     } catch (error) {
       console.error("Error updating profile", error);
       setError("Failed to update profile.");
