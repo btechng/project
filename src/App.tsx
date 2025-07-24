@@ -1,29 +1,20 @@
-import { Route, Routes } from 'react-router-dom'
-import './App.css'
-import HomePage from './Pages/HomePage/HomePage'
-import SignUpPage from './Pages/SignUpPage/SignUpPage'
-import LoginPage from './Pages/LoginPage/LoginPage'
-import UserProfilePage from './Pages/UserProfilePage/UserProfilePage'
-import UserDetails from './Pages/UserDetails/UserDetails'
-import UpdateAllUsers from './Pages/UpdateAllUsers/UpdateAllUser'
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import HomePage from "./Pages/HomePage/HomePage";
 
-
-
+import ProjectManager from "./Pages/ProjectManagerPage/ProjectManagerPage";
+import AddProject from "./Components/Addproject/Addproject";
 
 function App() {
-
   return (
     <>
       <Routes>
-        <Route path='/' element={<HomePage/>}/>
-        <Route path='/signup' element={<SignUpPage/>}/>
-        <Route path='/login' element={<LoginPage/>}/>
-        <Route path='/userprofile' element={<UserProfilePage/>}/>
-        <Route path='/userdetails/:id' element={<UserDetails/>}/>
-        <Route path='/updateallusers/:id' element={<UpdateAllUsers/>}/>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/allprojects" element={<ProjectManager />} />
+        <Route path="/addproject" element={<AddProject />} />
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
