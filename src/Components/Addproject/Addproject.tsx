@@ -47,7 +47,7 @@ const AddProject = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:6007/task",
+        "https://firstbackendclass.onrender.com/task",
         formattedData
       );
       console.log(data);

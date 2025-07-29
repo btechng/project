@@ -25,9 +25,6 @@ const Home = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const isValidDateFormat = (dateString: string) =>
-    /^\d{4}\/\d{2}\/\d{2}$/.test(dateString);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -39,11 +36,8 @@ const Home = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (
-      !isValidDateFormat(formData.startDate) ||
-      !isValidDateFormat(formData.endDate)
-    ) {
-      enqueueSnackbar("Dates must be in YYYY/MM/DD format.", {
+    if (!formData.startDate || !formData.endDate) {
+      enqueueSnackbar("Please select both start and end dates.", {
         variant: "warning",
       });
       setLoading(false);
@@ -51,7 +45,10 @@ const Home = () => {
     }
 
     try {
-      const { data } = await axios.post("http://localhost:6007/task", formData);
+      const { data } = await axios.post(
+        "https://firstbackendclass.onrender.com/task",
+        formData
+      );
       console.log(data);
       enqueueSnackbar("Project added successfully!", { variant: "success" });
       setFormData({
@@ -86,7 +83,7 @@ const Home = () => {
         elevation={4}
         sx={{
           width: "95%",
-          maxWidth: "750px", // Reduced width for focus
+          maxWidth: "750px",
           p: { xs: 3, md: 5 },
           borderRadius: 4,
           background: "white",
@@ -132,18 +129,20 @@ const Home = () => {
             />
             <Stack direction={{ xs: "column", md: "row" }} spacing={3}>
               <TextField
-                label="Start Date (YYYY/MM/DD)"
+                label="Start Date"
                 name="startDate"
-                placeholder="2025/07/24"
+                type="date"
+                InputLabelProps={{ shrink: true }}
                 value={formData.startDate}
                 onChange={handleChange}
                 required
                 fullWidth
               />
               <TextField
-                label="End Date (YYYY/MM/DD)"
+                label="End Date"
                 name="endDate"
-                placeholder="2025/08/24"
+                type="date"
+                InputLabelProps={{ shrink: true }}
                 value={formData.endDate}
                 onChange={handleChange}
                 required
@@ -152,7 +151,6 @@ const Home = () => {
             </Stack>
           </Stack>
 
-          {/* Buttons now stacked vertically */}
           <Stack direction="column" spacing={2} mb={2}>
             <Button
               type="submit"
