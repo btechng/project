@@ -9,7 +9,9 @@ const ProjectManager = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const { data } = await axios.get("http://localhost:6007/task");
+        const { data } = await axios.get(
+          "https://firstbackendclass.onrender.com/task"
+        );
         setProjects(data);
       } catch (error) {
         console.error("Failed to fetch projects:", error);
