@@ -86,7 +86,7 @@ const ViewProject = () => {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => navigate(`/edit/${project._id}`)}
+              onClick={() => navigate(`/userdetails/edit/${project._id}`)}
               fullWidth
             >
               Edit
@@ -94,7 +94,7 @@ const ViewProject = () => {
             <Button
               variant="outlined"
               color="error"
-              onClick={() => navigate(`/delete/${project._id}`)}
+              onClick={() => navigate(`/userdetails/delete/${project._id}`)}
               fullWidth
             >
               Delete

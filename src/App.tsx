@@ -19,13 +19,16 @@ function App() {
         <Route path="/addproject" element={<AddProject />} />
 
         {/* View single project */}
-        <Route path="/task/:id" element={<ViewProject />} />
+        <Route path="/userdetails/:id" element={<ViewProject />} />
 
         {/* Edit single project */}
-        <Route path="/task/edit/:id" element={<UpdateSingleProject />} />
+        <Route path="/userdetails/edit/:id" element={<UpdateSingleProject />} />
 
         {/* Delete single project */}
-        <Route path="/task/delete/:id" element={<DeleteSingleProject />} />
+        <Route
+          path="/userdetails/delete/:id"
+          element={<DeleteSingleProject />}
+        />
       </Routes>
     </>
   );
