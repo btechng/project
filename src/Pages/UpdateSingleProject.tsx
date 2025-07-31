@@ -172,13 +172,6 @@ const UpdateSingleProject = () => {
             }
             label="Mark as Completed"
           />
-          <TextField
-            label="Project Link"
-            name="projectLink"
-            value={formData.projectLink}
-            onChange={handleChange}
-            fullWidth
-          />
 
           <Button
             variant="contained"
