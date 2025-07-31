@@ -7,6 +7,9 @@ import {
   CircularProgress,
   Stack,
   Paper,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,6 +24,9 @@ const UpdateSingleProject = () => {
     description: "",
     startDate: "",
     endDate: "",
+    status: "",
+    isCompleted: false,
+    projectLink: "",
   });
 
   const [loading, setLoading] = useState(true);
@@ -35,8 +41,11 @@ const UpdateSingleProject = () => {
         title: data.title || "",
         assignedTo: data.assignedTo || "",
         description: data.description || "",
-        startDate: data.startDate || "",
-        endDate: data.endDate || "",
+        startDate: data.startDate?.substring(0, 10) || "",
+        endDate: data.endDate?.substring(0, 10) || "",
+        status: data.status || "",
+        isCompleted: data.isCompleted || false,
+        projectLink: data.projectLink || "",
       });
     } catch (error) {
       console.error("Failed to fetch project", error);
@@ -48,8 +57,13 @@ const UpdateSingleProject = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const target = e.target as HTMLInputElement;
+    const { name, value, type } = target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? target.checked : value,
+    }));
   };
 
   const handleUpdate = async () => {
@@ -135,6 +149,37 @@ const UpdateSingleProject = () => {
             fullWidth
             required
           />
+          <TextField
+            select
+            label="Status"
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            fullWidth
+            required
+          >
+            <MenuItem value="Pending">Pending</MenuItem>
+            <MenuItem value="In Progress">In Progress</MenuItem>
+            <MenuItem value="Completed">Completed</MenuItem>
+          </TextField>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={formData.isCompleted}
+                onChange={handleChange}
+                name="isCompleted"
+              />
+            }
+            label="Mark as Completed"
+          />
+          <TextField
+            label="Project Link"
+            name="projectLink"
+            value={formData.projectLink}
+            onChange={handleChange}
+            fullWidth
+          />
+
           <Button
             variant="contained"
             color="primary"
