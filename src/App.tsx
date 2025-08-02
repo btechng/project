@@ -9,6 +9,11 @@ import UpdateSingleProject from "./Pages/UpdateSingleProject";
 
 import DeleteSingleProject from "./Pages/DeleteSingleProject";
 import ViewProject from "./Pages/ViewProject";
+import Register from "./Pages/Register";
+import Login from "./Pages/Login";
+import AllUsers from "./Pages/AllUsers";
+import SingleUser from "./Pages/SingleUser";
+import EditUser from "./Pages/EditUser";
 
 function App() {
   return (
@@ -29,6 +34,11 @@ function App() {
           path="/userdetails/delete/:id"
           element={<DeleteSingleProject />}
         />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/users" element={<AllUsers />} />
+        <Route path="/user/:id" element={<SingleUser />} />
+        <Route path="/edit-user/:id" element={<EditUser />} />
       </Routes>
     </>
   );
