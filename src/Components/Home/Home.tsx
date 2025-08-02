@@ -83,7 +83,7 @@ const Home = () => {
             }}
           >
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              TasknCart
+              Welcome!
             </Typography>
             <Stack direction="row" spacing={2}>
               <Button
