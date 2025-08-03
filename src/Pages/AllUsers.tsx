@@ -1,16 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers, deleteUser } from "../api/userApi";
 import { Link } from "react-router-dom";
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Stack,
+  Divider,
+  Avatar,
+} from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+}
 
 export default function AllUsers() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const fetchUsers = async () => {
-    try {
-      const res = await getAllUsers();
-      setUsers(res.data);
-    } catch (err) {
-      alert("Failed to fetch users.");
+    const { data } = await getAllUsers();
+    setUsers(data);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Delete this user?")) {
+      await deleteUser(id);
+      fetchUsers();
     }
   };
 
@@ -18,59 +37,78 @@ export default function AllUsers() {
     fetchUsers();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this user?")) {
-      await deleteUser(id);
-      fetchUsers();
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-blue-700 mb-8">
-          All Users
-        </h1>
+    <Box px={2} py={5} bgcolor="#f4f6f8" minHeight="100vh">
+      <Typography variant="h4" fontWeight={700} align="center" mb={4}>
+        All Users
+      </Typography>
 
-        {users.length === 0 ? (
-          <p className="text-center text-gray-500">No users found.</p>
-        ) : (
-          <ul className="space-y-4">
-            {users.map((user: any) => (
-              <li
-                key={user._id}
-                className="bg-white p-5 rounded-lg shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
-              >
-                <div>
-                  <p className="text-lg font-semibold">{user.name}</p>
-                  <p className="text-sm text-gray-600">{user.email}</p>
-                </div>
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={3}
+        maxWidth="800px"
+        mx="auto"
+      >
+        {users.map((user) => (
+          <Paper
+            key={user._id}
+            elevation={4}
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              backgroundColor: "#fff",
+              transition: "0.3s",
+              "&:hover": { boxShadow: 8 },
+            }}
+          >
+            <Stack spacing={2}>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Avatar sx={{ bgcolor: "primary.main", width: 56, height: 56 }}>
+                  <PersonIcon />
+                </Avatar>
+                <Box>
+                  <Typography variant="h6">{user.name}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {user.email}
+                  </Typography>
+                </Box>
+              </Stack>
 
-                <div className="flex gap-2 flex-wrap">
-                  <Link
-                    to={`/user/${user._id}`}
-                    className="px-4 py-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
-                  >
-                    View
-                  </Link>
-                  <Link
-                    to={`/edit-user/${user._id}`}
-                    className="px-4 py-1.5 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(user._id)}
-                    className="px-4 py-1.5 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
+              <Divider />
+
+              <Stack direction="row" spacing={2} justifyContent="flex-end">
+                <Button
+                  component={Link}
+                  to={`/user/${user._id}`}
+                  variant="outlined"
+                  color="info"
+                  size="small"
+                >
+                  View
+                </Button>
+                <Button
+                  component={Link}
+                  to={`/user/edit/${user._id}`}
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                >
+                  Edit
+                </Button>
+                <Button
+                  onClick={() => handleDelete(user._id)}
+                  variant="contained"
+                  color="error"
+                  size="small"
+                >
+                  Delete
+                </Button>
+              </Stack>
+            </Stack>
+          </Paper>
+        ))}
+      </Box>
+    </Box>
   );
 }

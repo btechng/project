@@ -96,7 +96,7 @@ const Home = () => {
               <Button
                 color="inherit"
                 variant="contained"
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/signup")}
               >
                 Sign Up
               </Button>

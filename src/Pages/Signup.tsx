@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getUserById, updateUser } from "../api/userApi";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signupUser } from "../api/userApi";
 import {
   Box,
   Paper,
@@ -10,22 +10,13 @@ import {
   Stack,
 } from "@mui/material";
 
-export default function EditUser() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
-
-  useEffect(() => {
-    const fetch = async () => {
-      const { data } = await getUserById(id!);
-      setFormData({ name: data.name, email: data.email, password: "" });
-    };
-    fetch();
-  }, [id]);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,9 +24,13 @@ export default function EditUser() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await updateUser(id!, formData);
-    alert("User updated");
-    navigate("/users");
+    try {
+      await signupUser(formData);
+      alert("Signup successful");
+      navigate("/login");
+    } catch {
+      alert("Signup failed");
+    }
   };
 
   return (
@@ -49,14 +44,13 @@ export default function EditUser() {
     >
       <Paper elevation={4} sx={{ p: 4, maxWidth: 450, width: "100%" }}>
         <Typography variant="h5" mb={3} fontWeight={600}>
-          Edit User
+          Sign Up
         </Typography>
         <form onSubmit={handleSubmit}>
           <Stack spacing={2}>
             <TextField
               label="Name"
               name="name"
-              value={formData.name}
               onChange={handleChange}
               fullWidth
               required
@@ -64,21 +58,24 @@ export default function EditUser() {
             <TextField
               label="Email"
               name="email"
-              value={formData.email}
+              type="email"
               onChange={handleChange}
               fullWidth
               required
             />
             <TextField
-              label="New Password"
+              label="Password"
               name="password"
               type="password"
-              value={formData.password}
               onChange={handleChange}
               fullWidth
+              required
             />
-            <Button variant="contained" type="submit" fullWidth>
-              Update
+            <Button type="submit" variant="contained" fullWidth>
+              Sign Up
+            </Button>
+            <Button onClick={() => navigate("/login")} fullWidth>
+              Already have an account? Login
             </Button>
           </Stack>
         </form>

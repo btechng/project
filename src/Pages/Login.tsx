@@ -1,78 +1,75 @@
 import React, { useState } from "react";
-import { loginUser } from "../api/userApi";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../api/userApi";
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Stack,
+} from "@mui/material";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await loginUser(form);
-      alert(`Welcome ${res.data.user.name}`);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/");
-    } catch (err) {
-      alert("Invalid credentials");
+      const { data } = await loginUser(formData);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      alert("Login successful");
+      navigate("/users");
+    } catch {
+      alert("Invalid login");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">
-          Welcome Back
-        </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required
-          />
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-200"
-          >
-            Login
-          </button>
+    <Box
+      minHeight="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      bgcolor="#f4f6f8"
+      px={2}
+    >
+      <Paper elevation={4} sx={{ p: 4, maxWidth: 400, width: "100%" }}>
+        <Typography variant="h5" mb={3} fontWeight={600}>
+          Login
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={2}>
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+            <Button variant="contained" type="submit" fullWidth>
+              Login
+            </Button>
+            <Button onClick={() => navigate("/signup")} fullWidth>
+              Don’t have an account? Sign Up
+            </Button>
+          </Stack>
         </form>
-
-        <p className="text-sm text-center mt-4">
-          Don&apos;t have an account?{" "}
-          <button
-            type="button"
-            onClick={() => navigate("/register")}
-            className="text-blue-600 hover:underline font-medium"
-          >
-            Sign Up Here
-          </button>
-        </p>
-
-        {/* ✅ See All Users Button */}
-        <div className="text-center mt-6">
-          <button
-            onClick={() => navigate("/users")}
-            className="text-sm font-semibold text-gray-700 hover:text-blue-600 underline"
-          >
-            See All Users
-          </button>
-        </div>
-      </div>
-    </div>
+      </Paper>
+    </Box>
   );
 }
